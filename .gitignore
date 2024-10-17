@@ -1,3 +1,11 @@
+# LegalAI
+dati_ollama/*
+python_venv/*
+dbdata/*
+sqlite_chat_history.db
+hello.py
+main.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
