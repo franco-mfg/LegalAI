@@ -5,6 +5,7 @@ dbdata/*
 sqlite_chat_history.db
 hello.py
 main.py
+*Zone.Identifier
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -25,7 +25,8 @@ if tls.pip_install(pkg_list)>0:
 
 import flask
 from flask import request, jsonify, send_file
-from rag_history import do_query
+# from rag_history import do_query
+from integrar import do_query # liandi
 
 app = flask.Flask(__name__)
 
@@ -35,13 +36,13 @@ OLLAMA_BASE_URL=os.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434')
 dbg = Debug(DEBUG)
 
 def docker_send_stop(sig, frame):
-    print("OK docker stopped server")
+    dbg.print("OK docker stopped server")
     os.kill(os.getpid(), signal.SIGTERM)
     ## app.close()
 
 # per uscire da docker senza errore 137
 signal.signal(signal.SIGTERM, docker_send_stop)
-print("*** Setting signal")
+dbg.print("*** Setting signal")
 
 @app.route('/')
 def home():

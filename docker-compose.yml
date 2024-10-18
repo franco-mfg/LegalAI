@@ -12,11 +12,12 @@ services:
       - ./dati_ollama:/root/.ollama
     environment:
       - OLLAMA_KEEP_ALIVE=30m
-    deploy:
-      resources:
-        limits:
-          cpus: "6.0"
-          memory: "16G"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "6.0"
+    #       memory: "16G"
+    
 # #######################
   legalai:
     container_name: myDevTest
@@ -34,10 +35,10 @@ services:
       - FLASK_RUN_PORT=8000
       # FLASK_HOST='0.0.0.0'
       - OLLAMA_BASE_URL=http://ollama:11434/
-      # LLM_MODEL=qwen2:1.5b
-      - LLM_MODEL=llama3.1
-      # - EMBED_MODEL=all-MiniLM-L6-v2
-      - EMBED_MODEL=BAAI/bge-base-en-v1.5
+      - LLM_MODEL=qwen2:1.5b
+      # LLM_MODEL=llama3.1
+      - EMBED_MODEL=all-MiniLM-L6-v2
+      # - EMBED_MODEL=BAAI/bge-base-en-v1.5
       - EURLEX_TABLE=test
       - EURLEX_NUM_REC=100
       - SLEEP=5
