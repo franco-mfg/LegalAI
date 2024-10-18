@@ -16,8 +16,8 @@ pkg_list=[
   "langchain-huggingface",
   'sentence-transformers',
   "langchain-ollama",
-  "pandas"
-  # 'streamlit'
+  "pandas",
+  'streamlit'
 ]
 
 if tls.pip_install(pkg_list)>0:
