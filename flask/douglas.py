@@ -86,11 +86,14 @@ db_2 = Chroma(embedding_function=embedding_model, persist_directory=persist_dire
                 collection_name='legalai',
                 collection_metadata={"hnsw:space": "cosine"})
 
-# testing db_2
-data=db_2.get(limit=5,include=["metadatas", "documents"])
-dbg.print('test db')
-# for rec in data:
-#     dbg.print(rec.metadata)
+# try getting some data
+if dbg.on():
+    recs=db_2.get(include=['metadatas','documents'], limit=30)
+
+    for rec in recs["metadatas"]:
+        print(rec)
+   
+
 
 # Metadados e atributos sugeridos
 metadata_field_info = [
