@@ -17,7 +17,7 @@ services:
     #     limits:
     #       cpus: "6.0"
     #       memory: "16G"
-    
+
 # #######################
   legalai:
     container_name: myDevTest
@@ -28,6 +28,7 @@ services:
       - ollama
     ports:
       - "5000:5000"
+      - "80:8501"
     volumes:
       - ./dbdata:/legalai/db
       - ./python_venv:/legalai/.venv
@@ -35,6 +36,7 @@ services:
       - FLASK_RUN_PORT=8000
       # FLASK_HOST='0.0.0.0'
       - OLLAMA_BASE_URL=http://ollama:11434/
+      - LEGALAI_SERVER_URL=http://localhost:5000
       - LLM_MODEL=qwen2:1.5b
       # LLM_MODEL=llama3.1
       - EMBED_MODEL=all-MiniLM-L6-v2
@@ -42,4 +44,4 @@ services:
       - EURLEX_TABLE=test
       - EURLEX_NUM_REC=100
       - SLEEP=5
-      - DEBUG=true
+      - DEBUG=1

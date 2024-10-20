@@ -17,7 +17,11 @@ export FLASK_ENV=development
 # export FLASK_RUN_PORT=8000
 # export FLASK_RUN_HOST="0.0.0.0"
 
+# installiamo i moduli necessari prima
+# di avviare i processi
+python moduli.py
 python $FLASK_APP.py &
+
 streamlit run streamlit_client.py
 
 # python hello.py

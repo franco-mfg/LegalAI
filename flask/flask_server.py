@@ -26,7 +26,8 @@ if tls.pip_install(pkg_list)>0:
 import flask
 from flask import request, jsonify, send_file
 # from rag_history import do_query
-from integrar import do_query # liandi
+
+from douglas import do_query # liandi
 
 app = flask.Flask(__name__)
 

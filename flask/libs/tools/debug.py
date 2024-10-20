@@ -10,9 +10,10 @@ class Debug:
 
     if parameter is False then nothing is printed
   """
-  def __init__(self,debug=True) -> None:
+  def __init__(self,debug=True, file=None) -> None:
     # print('Debug:','ON' if debug else 'OFF')
     self.__DEBUG__=debug
+    self.file=file
 
   def on(self):
     """
@@ -27,7 +28,7 @@ class Debug:
     """
     return self.__DEBUG__==True
 
-  def print(self,*args):
+  def print(self, *args):
     """
     usare al posto di print(...)
     stampa alcun messaggio.
@@ -41,4 +42,4 @@ class Debug:
     for i in args:
       res+=f' {i}'
 
-    print(res, file=sys.stderr)
+    print('' if self.file is None else f'{self.file}:',res, file=sys.stderr, flush=True)

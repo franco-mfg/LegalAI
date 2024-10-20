@@ -11,6 +11,7 @@ import os, sys, json
 sys.path.append('./libs')
 
 import tools.utils  as utils
+from tools.debug  import Debug
 
 ## Envirnoment (Docker)
 DEBUG          =os.environ.get('DEBUG', 'false').lower() in ['si','yes','on','1',"true"]
@@ -18,6 +19,8 @@ LLM_MODEL      =os.environ.get('LLM_MODEL', 'qwen2:1.5b')
 OLLAMA_BASE_URL=os.environ.get('OLLAMA_BASE_URL', 'http://localhost:11434')
 EMBED_MODEL    =os.environ.get('EMBED_MODEL', 'all-MiniLM-L6-v2')
 ##
+
+dbg=Debug(DEBUG, __file__)
 
 pkg_list=[
     "chromadb",
@@ -80,19 +83,25 @@ embedding_model = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
 persist_directory = './db/'+embedding_model.model_name.replace('/','-')
 
 db_2 = Chroma(embedding_function=embedding_model, persist_directory=persist_directory,
-                      collection_name='legalai',
-                      collection_metadata={"hnsw:space": "cosine"})
+                collection_name='legalai',
+                collection_metadata={"hnsw:space": "cosine"})
+
+# testing db_2
+data=db_2.get(limit=5,include=["metadatas", "documents"])
+dbg.print('test db')
+# for rec in data:
+#     dbg.print(rec.metadata)
 
 # Metadados e atributos sugeridos
 metadata_field_info = [
-    AttributeInfo(name="source", description="Numero Celex?", type="string"),
+    AttributeInfo(name="source", description="Celex ID", type="string"),
     AttributeInfo(name="labels", description="Argomenti dei documenti", type="string"),
-    AttributeInfo(name="number", description="Numero del Regolamento oppure Diretiva", type="string")
+    AttributeInfo(name="number", description="Numero del Regolamento o Direttiva", type="string")
 
 ]
 
 # Conteúdo dos documentos que será utilizado pelo SelfQueryRetriever
-document_contents = "Texto del Regolamento oppure Diretiva"  # Nome do campo que contém o texto dos documentos
+document_contents = "Testo del Regolamento o Diretiva"  # Nome do campo que contém o texto dos documentos
 
 # Prompt para perguntas e contexto
 prompt_template = """
@@ -138,7 +147,7 @@ import time
 # Função para realizar consulta
 def do_query(query: str, multiquery=None, sid='1-1-0'):
     tm_on = time.perf_counter()
-    print("*** Query:", query)
+    dbg.print("*** Query:", query)
     stream_model = True
     response = ''
 
@@ -146,9 +155,10 @@ def do_query(query: str, multiquery=None, sid='1-1-0'):
         print("***** Stream")
         for item in chain.stream(query):
             response = response + item
-            print(item, end='')
-            js='{'+f'"answer":"{item}"'+'}'
-            # jst=json.dump(js)
+            dbg.print(item)
+            dj={"answer":item}
+            js=json.dumps(dj)
+            # dbg.print(dj,js)
             yield(f"{js}\n")
 
         counter=time.perf_counter()-tm_on

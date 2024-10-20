@@ -11,7 +11,7 @@ from tools.debug import Debug
 
 ## Envirnoment (Docker)
 DEBUG          =os.environ.get('DEBUG', 'false').lower() in ['si','yes','on','1',"true"]
-LEGALAI_URL=os.environ.get('LEGALAI_URL', 'http://legalai:5000')
+LEGALAI_SERVER_URL=os.environ.get('LEGALAI_SERVER_URL', 'http://localhost:5000')
 ##
 
 dbg=Debug(DEBUG)
@@ -19,33 +19,33 @@ dbg=Debug(DEBUG)
 # proviamo ad installare streamlit
 utils.pip_install('streamlit')
 
+
 def stream_server_data(prompt, sid):
-  req=requests.get(f"http://{LEGALAI_URL}/api?query={prompt}&sid={sid}", stream=True)
+  req=requests.get(f"{LEGALAI_SERVER_URL}/api?query={prompt}&sid={sid}", stream=True)
   if req.status_code==200:
     for line in req.iter_lines():
         if line:
-          dbg.print(type(line), line)
-          dbg.print('qui')
+          # dbg.print(type(line), line)
           jsData=json.loads(line)
-          dbg.print('qua')
           dataLine=''
           for key in jsData:
-            dbg.print('Key',key)
+            # dbg.print('Key',key)
             match key:
               case 'answer':
                 dataLine+=dataLine+jsData[key]
               case 'time':
                 tm=jsData[key]
-                dbg.print(type(tm),tm)
-                dbg.print('time '+f"\n\n*query in: {float(tm):.02f}sec*")
+                # dbg.print(type(tm),tm)
+                # dbg.print('time '+f"\n\n*query in: {float(tm):.02f}sec*")
                 dataLine+=dataLine+f"\n\n*query in: {float(tm):.02f}sec*"
-                dbg.print("dataline:",dataLine)
+                # dbg.print("dataline:",dataLine)
           yield dataLine # str(dataLine,'utf-8')
 
 def main():
+  # per ottenere session ID
   ctx = get_script_run_ctx()
 
-  st.title('Ollama test')
+  # st.title(f'Ollama {LEGALAI_SERVER_URL}')
 
   dbg.print('ISID',ctx.session_id)
 
@@ -99,6 +99,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+st.write("SERVER URL:",LEGALAI_SERVER_URL)
 
 if __name__ == "__main__":
     # ptvsd.enable_attach(address=('localhost', 5678), redirect_output=True)
