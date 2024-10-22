@@ -38,7 +38,7 @@ dbg = Debug(DEBUG)
 
 def docker_send_stop(sig, frame):
     dbg.print("OK docker stopped server")
-    os.kill(os.getpid(), signal.SIGTERM)
+    os.kill(os.getpid(), signal.SIGINT)
     ## app.close()
 
 # per uscire da docker senza errore 137
@@ -109,4 +109,4 @@ def info():
     return jsonify(info)
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG, host="0.0.0.0")
+    app.run(debug=False, host="0.0.0.0")

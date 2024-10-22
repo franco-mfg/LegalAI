@@ -155,7 +155,7 @@ def do_query(query: str, multiquery=None, sid='1-1-0'):
     response = ''
 
     if stream_model:
-        print("***** Stream")
+        dbg.print("***** Stream")
         for item in chain.stream(query):
             response = response + item
             dbg.print(item)
@@ -210,13 +210,15 @@ if __name__ == '__main__':
     response_docs = query_documents(user_input)
 
     # Obtém a resposta completa
+    raw_response=''
     for dato in do_query(user_input):
         # raw_response = do_query(user_input)
-        raw_response = dato
-        # print(dato)
+        chunk=json.loads(dato)["answer"]
+        raw_response += chunk
+        print(chunk, end='')
 
     # Processa a resposta para separar o conteúdo do metadado
-    resposta_texto, metadados = process_response(raw_response['answer'])
+    # resposta_texto, metadados = process_response(raw_response['answer'])
 
     # Exibe a resposta em texto e os metadados separados
     print(f"\nDomanda: {user_input}\n")
