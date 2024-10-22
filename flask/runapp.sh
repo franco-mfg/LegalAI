@@ -6,13 +6,13 @@ if [ -z "$COLAB_RELEASE_TAG" ]; then
   if [ ! -d ".venv/bin" ]; then
     echo "Python virtual env does not exist. creating ..."
     python3 -m venv --prompt LegaAI .venv
-  fi
-
-  export PATH=".venv/bin:$PATH"
+    ## extra modules
+    pip install requests
+    export PATH=".venv/bin:$PATH"
+  fi    
+else
+  echo "In COLAB"    
 fi
-
-## extra modules
-pip install requests > /dev/null
 
 echo running app
 export FLASK_APP=flask_server
